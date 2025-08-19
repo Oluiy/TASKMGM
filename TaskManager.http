@@ -1,6 +1,31 @@
 @TaskManager_HostAddress = http://localhost:5074
 
-GET {{TaskManager_HostAddress}}/weatherforecast/
+### Send Request | Debug
+GET {{TaskManager_HostAddress}}/api/tasks
 Accept: application/json
 
-###
+### Send Request | Debug
+GET {{TaskManager_HostAddress}}/api/tasks/1
+Accept: application/json
+
+### Send Request | Debug
+POST {{TaskManager_HostAddress}}/api/tasks
+Content-Type: application/json
+
+{
+  "title": "African History",
+  "isCompleted": true
+}
+
+### Send Request | Debug
+PUT {{TaskManager_HostAddress}}/api/tasks/4
+Content-Type: application/json
+
+{
+  "title": "Monomotapa Empire",
+  "isCompleted": true
+}
+
+### Send Request | Debug
+DELETE {{TaskManager_HostAddress}}/api/tasks/4
+
