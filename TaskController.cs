@@ -99,6 +99,22 @@ namespace TaskManager
                 return NotFound(e.Message);
             }
         }
+
+        [HttpGet("search")]
+        public ActionResult<List<TaskResponseDto>> SearchByParam([FromQuery] bool? isCompleted)
+        {
+            try
+            {
+                var filteredTask = _task.Where(e => e.IsCompleted.Equals(isCompleted)).ToList();
+                if (!filteredTask.Any()) return NotFound();
+
+                return Ok(filteredTask);
+            }
+            catch (Exception e)
+            {
+                return NotFound(e.Message);
+            }
+        }
     }
 }
 
