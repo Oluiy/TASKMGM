@@ -33,3 +33,4 @@
 /Users/israel/RiderProjects/TASKMGM/obj/Debug/net9.0/TaskManager.pdb
 /Users/israel/RiderProjects/TASKMGM/obj/Debug/net9.0/TaskManager.genruntimeconfig.cache
 /Users/israel/RiderProjects/TASKMGM/obj/Debug/net9.0/ref/TaskManager.dll
+/Users/israel/RiderProjects/TASKMGM/obj/Debug/net9.0/TaskManager.sourcelink.json
