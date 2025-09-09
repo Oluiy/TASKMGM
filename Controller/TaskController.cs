@@ -1,7 +1,9 @@
+using System.ComponentModel.DataAnnotations;
 using System.Net.NetworkInformation;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using program.Data;
+using TaskManager.Caching;
 using TaskManager.Model;
 
 namespace TaskManager
@@ -11,16 +13,30 @@ namespace TaskManager
     public class TaskController : ControllerBase
     {
         private readonly PgDbContext _context; // List<TaskResponseDto> explicitly states that _task is a list.
+        private readonly IRedisService _cache;
 
-        public TaskController(PgDbContext context)
+        public TaskController(PgDbContext context, IRedisService cache)
         {
             _context = context;
+            _cache = cache;
         }
 
         [HttpGet]
         [ProducesResponseType(200)]
         [ProducesResponseType(400)]
-        public async Task<IActionResult> GetAllTask() => Ok(await _context.Tasks.ToListAsync()); //Used Lambda Expression
+        // public async Task<IActionResult> GetAllTask() => Ok(await _context.Tasks.ToListAsync()); //Used Lambda Expression
+        public async Task<IActionResult> GetAllTask()
+        {
+            var task = _cache.GetData<IEnumerable<TaskModel>>("tasks");
+            if (task is not null)
+            {
+                return Ok(task);
+            }
+
+            task = await _context.Tasks.ToListAsync();
+            _cache.SetData("tasks", task);
+            return Ok(task);
+        } //Used Lambda Expression
         // public ActionResult<List<TaskResponseDto>> GetAllTask() => Ok(_task); //Used Lambda Expression
 
         [HttpGet("{id:int}")] 

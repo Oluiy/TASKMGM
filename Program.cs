@@ -1,5 +1,6 @@
 using Microsoft.EntityFrameworkCore;
 using program.Data;
+using TaskManager.Caching;
 
 namespace TaskManager
 {
@@ -11,6 +12,12 @@ namespace TaskManager
 
             // Add services to the container.
 
+            builder.Services.AddStackExchangeRedisCache(options =>
+            {
+                options.Configuration = builder.Configuration.GetConnectionString("Redis");
+                options.InstanceName = "Task_";
+            });
+            
             builder.Services.AddControllers()
                 .AddJsonOptions(options =>
                 {
@@ -22,6 +29,7 @@ namespace TaskManager
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
 
+            builder.Services.AddScoped<IRedisService, RedisService>();
             // Configure EF Core with SQL Server
             builder.Services.AddDbContext<PgDbContext>(options =>
                 options.UseNpgsql(builder.Configuration.GetConnectionString("PostgresqlConnection")));
